@@ -1,0 +1,31 @@
+name: CI Pipeline
+
+# Déclencheur : à chaque "push" sur le dépôt
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Récupérer le code du dépôt
+      - name: Checkout du code
+        uses: actions/checkout@v3
+
+      # 2. Installer Python dans l'environnement virtuel
+      - name: Configurer Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # 3. Installer les librairies nécessaires (pytest)
+      - name: Installer les dépendances
+        run: |
+          pip install pytest
+
+      # 4. Lancer les tests
+      # Le PYTHONPATH=. permet à pytest de trouver main.py à la racine
+      - name: Exécuter les tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:.
+          pytest tests/
